@@ -16,12 +16,11 @@
 
 package cn.rtast.rdblib.utils
 
-import cn.rtast.rdblib.api.DiaryBookAPI
+import cn.rtast.rdblib.DiaryManager
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 
 object Http {
@@ -79,7 +78,7 @@ object Http {
 
     private fun executeRequest(request: Request.Builder): Response {
         request.addHeader("Accept", "application/vnd.github+json")
-        request.addHeader("Authorization", "Bearer ${DiaryBookAPI.TOKEN}")
+        request.addHeader("Authorization", "Bearer ${DiaryManager.githubToken}")
         return client.newCall(request.build()).execute()
     }
 }

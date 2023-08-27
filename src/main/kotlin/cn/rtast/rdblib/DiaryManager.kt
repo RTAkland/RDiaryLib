@@ -14,23 +14,22 @@
  *    limitations under the License.
  */
 
-package cn.rtast.rdblib.utils
+package cn.rtast.rdblib
 
 import cn.rtast.rdblib.api.DiaryBookAPI
 import cn.rtast.rdblib.exceptions.DiaryExistsException
 import cn.rtast.rdblib.exceptions.DiaryNotFoundException
+import cn.rtast.rdblib.utils.format
 import java.io.File
-import java.text.SimpleDateFormat
+import java.util.*
 
-class DiaryManager {
+class DiaryManager(token: String) {
+    companion object {
+        lateinit var githubToken: String
+    }
 
-    private fun format(date: Date): Date {
-        val format = SimpleDateFormat("yyyy-MM-dd")
-        val formattedDate = format.format(date)
-        val parts = formattedDate.split("-")
-        val year = parts[0].toInt()
-        val month = parts[1].toInt()
-        return Date(year, month, formattedDate)
+    init {
+        githubToken = token
     }
 
     private fun exists(path: String): Boolean {
@@ -38,7 +37,7 @@ class DiaryManager {
     }
 
     fun newDiary(date: Date): File {
-        val formatted = this.format(date)
+        val formatted = date.format()
         val path = "src/content/diary/${formatted.year}/${formatted.month}/${formatted.full}"
         if (!this.exists(path)) {
             val file = File(path)
@@ -53,7 +52,7 @@ class DiaryManager {
     }
 
     fun updateDiary(date: Date, newContent: String): File {
-        val formatted = this.format(date)
+        val formatted = date.format()
         val path = "src/content/diary/${formatted.year}/${formatted.month}/${formatted.full}"
         if (!this.exists(path)) {
             throw DiaryNotFoundException("This diary is not exists, ues newDiary() to init it.")
@@ -66,7 +65,7 @@ class DiaryManager {
     }
 
     fun deleteDiary(date: Date) {
-        val formatted = this.format(date)
+        val formatted = date.format()
         val path = "src/content/diary/${formatted.year}/${formatted.month}/${formatted.full}"
         if (!this.exists(path)) {
             throw DiaryExistsException("This diary is not exists, use newDiary() to init it.")
@@ -76,7 +75,7 @@ class DiaryManager {
         }
     }
 
-    data class Date(
+    data class DateModel(
         val year: Int, val month: Int, val full: String
     )
 }

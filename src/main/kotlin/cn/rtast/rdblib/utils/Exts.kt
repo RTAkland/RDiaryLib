@@ -16,11 +16,13 @@
 
 package cn.rtast.rdblib.utils
 
+import cn.rtast.rdblib.DiaryManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileInputStream
 import java.security.MessageDigest
+import java.text.SimpleDateFormat
 import java.util.*
 
 fun String.removeFirstAndLastChar(): String {
@@ -70,4 +72,13 @@ fun File.getSha(): String {
     }
 
     return builder.toString()
+}
+
+fun Date.format(): DiaryManager.DateModel {
+    val format = SimpleDateFormat("yyyy-MM-dd")
+    val formattedDate = format.format(date)
+    val parts = formattedDate.split("-")
+    val year = parts[0].toInt()
+    val month = parts[1].toInt()
+    return DiaryManager.DateModel(year, month, formattedDate)
 }

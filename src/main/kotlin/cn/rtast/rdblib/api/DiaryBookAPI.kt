@@ -25,7 +25,6 @@ import java.io.File
 
 class DiaryBookAPI {
     companion object {
-        const val TOKEN = "TOKEN HERE"
         private const val OWNER = "RTAkland"
         private const val REPO = "DiaryBook"
         private const val API_BASE_URL = "https://api.github.com"
