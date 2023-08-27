@@ -65,6 +65,40 @@ dependencies {
 
 > API库版本查询地址 `https://www.jitpack.io/#RTAkland/RDBLib`
 
+### 使用far-aar
+> `fat-aar`是一种打包发方式， 可以将所有依赖的源代码都打包进最终的jar文件中
+> 以下为`gradle`的配置方法
+
+```gradle
+// build.gradle
+
+// 添加embed函数
+configurations {
+    embed
+    compile.extendsFrom(embed)
+}
+
+// ...
+
+// 添加jar任务
+jar {
+    from configurations.embed.collect {
+        it.isDirectory() ? it : zipTree(it)
+    }
+}
+
+// ...
+
+dependencies {
+    // 示例： 使用embed函数包裹api implementation等函数即可， 但是
+    // 需要在上方再添加一个相同的 api implementation声明
+    
+    implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11")
+    embed(api("com.squareup.okhttp3:okhttp:5.0.0-alpha.11"))
+    // or embed(implementation("com.squareup.okhttp3:okhttp:5.0.0-alpha.11"))
+}
+```
+
 # 开源
 
 - 本项目以[Apache-2.0](./LICENSE)许可开源, 即:
