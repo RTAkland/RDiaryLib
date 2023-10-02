@@ -41,6 +41,6 @@ class RDiaryLib {
 fun main() {
     val db = RDiaryLib()
     val dm = db.getDiaryManager()
-    db.setConf(AppConf("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", "RTAkland", "DiaryBook"))
+    db.setConf(AppConf("...", "RTAkland", "DiaryBook"))
     dm.sync()
 }
