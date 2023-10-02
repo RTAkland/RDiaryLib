@@ -14,18 +14,18 @@
  *    limitations under the License.
  */
 
-package cn.rtast.rdlib.data
+package cn.rtast.rdlib.models
 
-class DiaryDate(private val year: Int, private val month: Int, private val day: Int) {
-    fun getDate(slash: Boolean): String {
-        return if (slash) "$year/$month/$day" else "$year-$month-$day"
-    }
+import java.io.File
 
-    fun getDate(): String {
-        return "$year-$month-$day"
-    }
+data class FileURI(val filename: String, val diaryDate: DiaryDate) {
 
-    fun toIntArray(): IntArray {
-        return listOf(year, month, day).toIntArray()
+    val path = diaryDate.getDate(true).split("/").subList(0, 2).joinToString("/")
+
+    init {
+        val dir = File("./diary/${path}")
+        if (!dir.exists()) {
+            dir.mkdirs()
+        }
     }
 }

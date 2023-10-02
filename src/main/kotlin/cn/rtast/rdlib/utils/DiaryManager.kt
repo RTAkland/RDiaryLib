@@ -17,45 +17,53 @@
 package cn.rtast.rdlib.utils
 
 import cn.rtast.rdlib.DIARY_TEMPLATE
-import cn.rtast.rdlib.data.DiaryContent
-import cn.rtast.rdlib.data.DiaryDate
+import cn.rtast.rdlib.RDiaryLib
+import cn.rtast.rdlib.entities.RootContentEntity
+import cn.rtast.rdlib.entities.RootContentEntityItem
 import cn.rtast.rdlib.exceptions.DiaryAlreadyExistsException
 import cn.rtast.rdlib.exceptions.DiaryNotExistsException
+import cn.rtast.rdlib.models.DiaryDate
+import cn.rtast.rdlib.models.FileURI
+import com.google.gson.Gson
 import mu.two.KotlinLogging
 
 class DiaryManager {
 
     private val remoteBasePath = "src/content/diary"
+    private val remoteBaseUrl =
+        "https://api.github.com/repos/${RDiaryLib.owner}/${RDiaryLib.repo}/contents/$remoteBasePath"
     private val diaryFileManager = FileManager()
     private val logger = KotlinLogging.logger(this::class.java.name)
 
-    private fun createDiary(diaryDate: DiaryDate = getCurrentDate(), overwrite: Boolean = false) {
-        val date = diaryDate.getDate()
+    fun createDiary(diaryDate: DiaryDate = getCurrentDate(), overwrite: Boolean = false) {
+        val date = diaryDate.date
+        val fileURI = FileURI(date, diaryDate)
         val tmplContent = DIARY_TEMPLATE.replace("_date", date)
-        if (this.diaryFileManager.fileExists(date) && !overwrite) {
+        if (this.diaryFileManager.fileExists(fileURI) && !overwrite) {
             throw DiaryAlreadyExistsException("This diary is already exists")
-        } else if (this.diaryFileManager.fileExists(date) && overwrite) {
+        } else if (this.diaryFileManager.fileExists(fileURI) && overwrite) {
             logger.warn("This diary($date) will be overwrite to default template!")
-            this.diaryFileManager.updateFile(date, tmplContent)
+            this.diaryFileManager.updateFile(fileURI, tmplContent)
             return
         }
-        logger.info("Created a new diary: $date")
-        diaryFileManager.createFile(date, tmplContent)
+        diaryFileManager.createFile(fileURI, tmplContent)
     }
 
     fun deleteDiary(diaryDate: DiaryDate = getCurrentDate()) {
-        val dateString = diaryDate.getDate()
-        if (this.diaryFileManager.fileExists(dateString)) {
-            this.diaryFileManager.deleteFile(dateString)
+        val dateString = diaryDate.date
+        val fileURI = FileURI(dateString, diaryDate)
+        if (this.diaryFileManager.fileExists(fileURI)) {
+            this.diaryFileManager.deleteFile(fileURI)
         } else {
             throw DiaryNotExistsException("Diary($dateString) is not exists")
         }
     }
 
-    fun getDiaryContent(diaryDate: DiaryDate): String {
-        val dateString = diaryDate.getDate()
-        if (this.diaryFileManager.fileExists(dateString)) {
-            val content = this.diaryFileManager.readFile(dateString)
+    fun getDiaryContent(diaryDate: DiaryDate = getCurrentDate()): String {
+        val dateString = diaryDate.date
+        val fileURI = FileURI(dateString, diaryDate)
+        if (this.diaryFileManager.fileExists(fileURI)) {
+            val content = this.diaryFileManager.readFile(fileURI)
             if (content != null) {
                 return content
             }
@@ -63,11 +71,18 @@ class DiaryManager {
         throw DiaryNotExistsException("Diary($dateString) is not exists")
     }
 
-    fun updateDiaryContent(diaryDate: DiaryDate, newContent: DiaryContent) {
-
+    fun updateDiaryContent(diaryDate: DiaryDate = getCurrentDate(), newContent: String) {
+        val dateString = diaryDate.date
+        val fileURI = FileURI(dateString, diaryDate)
+        if (this.diaryFileManager.fileExists(fileURI)) {
+            this.diaryFileManager.updateFile(fileURI, newContent)
+        } else {
+            throw DiaryNotExistsException("Diary($dateString) is not exists")
+        }
     }
 
-    fun appendDiaryContent(diaryDate: DiaryDate, newContent: DiaryContent) {
-
+    fun sync() {
+        val response = Http.get(this.remoteBaseUrl).body.string().fromArrayJson<List<RootContentEntityItem>>()
+        println(response)
     }
 }

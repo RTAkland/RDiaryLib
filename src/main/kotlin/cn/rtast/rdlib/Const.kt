@@ -16,4 +16,10 @@
 
 package cn.rtast.rdlib
 
-const val DIARY_TEMPLATE = """---\ntitle: "_date"\ndescription: "_date"\npubDate: _date\n---\n"""
+const val DIARY_TEMPLATE = """---
+title: "_date"
+description: "_date"
+pubDate: _date
+---
+    
+"""

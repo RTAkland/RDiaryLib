@@ -16,8 +16,31 @@
 
 package cn.rtast.rdlib
 
+import cn.rtast.rdlib.models.AppConf
 import cn.rtast.rdlib.utils.DiaryManager
 
+class RDiaryLib {
+
+    companion object {
+        var key: String? = null
+        var owner: String? = null
+        var repo: String? = null
+    }
+
+    fun setConf(conf: AppConf) {
+        key = conf.key
+        owner = conf.owner
+        repo = conf.repo
+    }
+
+    fun getDiaryManager(): DiaryManager {
+        return DiaryManager()
+    }
+}
+
 fun main() {
-    val dm = DiaryManager()
+    val db = RDiaryLib()
+    val dm = db.getDiaryManager()
+    db.setConf(AppConf("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", "RTAkland", "DiaryBook"))
+    dm.sync()
 }

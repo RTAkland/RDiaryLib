@@ -14,15 +14,7 @@
  *    limitations under the License.
  */
 
-package cn.rtast.rdlib.utils
+package cn.rtast.rdlib.tests
 
-import cn.rtast.rdlib.models.DiaryDate
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
-fun getCurrentDate(): DiaryDate {
-    val date = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val result = date.format(formatter).split("-")
-    return DiaryDate(result[0], result[1], result[2])
+class RDiaryLibTest {
 }

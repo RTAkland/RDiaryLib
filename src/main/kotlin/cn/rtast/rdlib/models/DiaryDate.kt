@@ -14,15 +14,12 @@
  *    limitations under the License.
  */
 
-package cn.rtast.rdlib.utils
+package cn.rtast.rdlib.models
 
-import cn.rtast.rdlib.models.DiaryDate
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+data class DiaryDate(val year: String, val month: String, val day: String) {
+    fun getDate(slash: Boolean): String {
+        return if (slash) "$year/$month/$day" else "$year-$month-$day"
+    }
 
-fun getCurrentDate(): DiaryDate {
-    val date = LocalDate.now()
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    val result = date.format(formatter).split("-")
-    return DiaryDate(result[0], result[1], result[2])
+    val date = "$year-$month-$day"
 }

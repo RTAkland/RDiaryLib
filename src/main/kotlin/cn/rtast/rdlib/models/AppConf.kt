@@ -14,10 +14,10 @@
  *    limitations under the License.
  */
 
-package cn.rtast.rdlib.data
+package cn.rtast.rdlib.models
 
-class DiaryContent(val date: DiaryDate, val content: String) {
-    fun toMarkdown() {
-
-    }
-}
+data class AppConf(
+    val key: String,
+    val owner: String,
+    val repo: String
+)

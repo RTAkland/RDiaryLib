@@ -16,10 +16,24 @@
 
 package cn.rtast.rdlib.utils
 
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 fun LocalDate.format(slash: Boolean): String {
     val pattern = if (slash) "yyyy/MM/dd" else "yyyy-MM-dd"
     return this.format(DateTimeFormatter.ofPattern(pattern))
+}
+
+inline fun <reified T> String.fromArrayJson(): T {
+    return Gson().fromJson(this, object : TypeToken<T>() {}.type)
+}
+
+fun Any.toJson(): String {
+    return Gson().toJson(this)
+}
+
+inline fun <reified T> String.fromJson(): T {
+    return Gson().fromJson(this, T::class.java)
 }

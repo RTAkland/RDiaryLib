@@ -16,6 +16,7 @@
 
 package cn.rtast.rdlib.utils
 
+import cn.rtast.rdlib.models.FileURI
 import mu.two.KotlinLogging
 import java.io.File
 import java.io.FileReader
@@ -35,9 +36,10 @@ class FileManager(basePath: String = "./diary") {
         }
     }
 
-    fun createFile(fileName: String, content: String) {
-        logger.debug("create file: $fileName")
-        val filePath = "$basePath/$fileName"
+    fun createFile(fileURI: FileURI, content: String) {
+        logger.debug("create file: ${fileURI.filename}")
+        val filePath = "$basePath/${fileURI.path}/${fileURI.filename}.md"
+        println(filePath)
         val file = File(filePath)
 
         if (file.exists()) {
@@ -50,9 +52,9 @@ class FileManager(basePath: String = "./diary") {
         }
     }
 
-    fun deleteFile(fileName: String) {
-        logger.debug("delete file: $fileName")
-        val filePath = "$basePath/$fileName"
+    fun deleteFile(fileURI: FileURI) {
+        logger.debug("delete file: ${fileURI.filename}")
+        val filePath = "$basePath/${fileURI.path}/${fileURI.filename}.md"
         val file = File(filePath)
 
         if (file.exists()) {
@@ -63,9 +65,9 @@ class FileManager(basePath: String = "./diary") {
         }
     }
 
-    fun readFile(fileName: String): String? {
-        logger.debug("read file: $fileName")
-        val filePath = "$basePath/$fileName"
+    fun readFile(fileURI: FileURI): String? {
+        logger.debug("read file: ${fileURI.filename}")
+        val filePath = "$basePath/${fileURI.path}/${fileURI.filename}.md"
         val file = File(filePath)
 
         if (file.exists()) {
@@ -80,9 +82,9 @@ class FileManager(basePath: String = "./diary") {
         return null
     }
 
-    fun updateFile(fileName: String, newContent: String) {
-        logger.debug("update file: $fileName, content: $newContent")
-        val filePath = "$basePath/$fileName"
+    fun updateFile(fileURI: FileURI, newContent: String) {
+        logger.debug("update file: ${fileURI.filename}, content: $newContent")
+        val filePath = "$basePath/${fileURI.path}/${fileURI.filename}.md"
         val file = File(filePath)
 
         if (file.exists()) {
@@ -95,9 +97,9 @@ class FileManager(basePath: String = "./diary") {
         }
     }
 
-    fun fileExists(fileName: String): Boolean {
-        logger.debug("check file status: $fileName")
-        val filePath = "$basePath/$fileName"
+    fun fileExists(fileURI: FileURI): Boolean {
+        logger.debug("check file status: ${fileURI.filename}")
+        val filePath = "$basePath/${fileURI.path}/${fileURI.filename}.md"
         val file = File(filePath)
         val state = file.exists()
         logger.debug("file state: $state")
