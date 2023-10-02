@@ -14,10 +14,7 @@
  *    limitations under the License.
  */
 
-package cn.rtast.rdblib.entities.commit
+package cn.rtast
 
-data class Commit(
-    val message: String,
-    val committer: Committer,
-    val content: String
-)
+class RDiaryLib {
+}
