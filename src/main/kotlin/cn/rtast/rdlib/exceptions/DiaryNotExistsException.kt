@@ -14,7 +14,6 @@
  *    limitations under the License.
  */
 
-package cn.rtast
+package cn.rtast.rdlib.exceptions
 
-class RDiaryLib {
-}
+class DiaryNotExistsException(message: String?) : Throwable(message)
